@@ -3,13 +3,23 @@
   "version": "1.0.50",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts"
+    "dev": "bun run --watch src/index.ts",
+    "migrate.local": "bunx drizzle-kit generate && bunx drizzle-kit migrate",
+    "migrate": "bunx drizzle-kit migrate",
+    "start": "bun run src/index.ts"
   },
   "dependencies": {
-    "elysia": "latest"
+    "@elysiajs/cors": "^1.3.3",
+    "@elysiajs/swagger": "^1.3.0",
+    "better-auth": "^1.2.9",
+    "drizzle-orm": "^0.44.2",
+    "elysia": "latest",
+    "pg": "^8.16.0",
+    "winston": "^3.17.0"
   },
   "devDependencies": {
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "drizzle-kit": "^0.31.1"
   },
   "module": "src/index.js"
 }
