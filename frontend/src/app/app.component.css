@@ -1,2 +1,9 @@
 @reference "tailwindcss";
 
+.active-route {
+  @apply font-bold opacity-100 bg-purple-600;
+}
+
+.active-route:hover {
+  @apply bg-purple-600;
+}

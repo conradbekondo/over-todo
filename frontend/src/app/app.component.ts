@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, inject, signal } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import {
   LayoutDashboard,
   ListCheck,
@@ -7,15 +8,17 @@ import {
   LogOut,
   LucideAngularModule,
   Settings,
+  User,
 } from 'lucide-angular';
 
 @Component({
   selector: 'ot-root',
-  imports: [RouterLink, RouterLinkActive, LucideAngularModule],
+  imports: [RouterLink, RouterLinkActive, LucideAngularModule, RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent {
+  User = User;
   ListCheck = ListCheck;
   Settings = Settings;
   LogOut = LogOut;
@@ -30,6 +33,12 @@ export class AppComponent {
       path: 'todos',
       label: 'All Tasks',
     },
+    {
+      icon: Settings,
+      path: 'settings',
+      label: 'Settings',
+    },
   ];
   readonly sideMenuOpen = signal(false);
+  readonly title = inject(Title);
 }
