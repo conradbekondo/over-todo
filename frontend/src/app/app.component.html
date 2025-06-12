@@ -38,7 +38,8 @@
       <!-- <button class="text-gray-200 cursor-pointer">
         <lucide-icon [img]="Settings" size="18"></lucide-icon>
       </button> -->
-      <button class="border border-transparent hover:border-white w-full flex gap-3 justify-center items-center text-gray-200 cursor-pointer rounded-md p-2 transition-colors">
+      <button
+        class="border border-transparent hover:border-white w-full flex gap-3 justify-center items-center text-gray-200 cursor-pointer rounded-md p-2 transition-colors">
         <lucide-icon [img]="LogOut" size="18"></lucide-icon>
         @if(sideMenuOpen()) {
         <span>Sign out</span>
@@ -49,7 +50,5 @@
   </div>
 </div>
 <main [class.ml-44]="sideMenuOpen()"
-  class="ml-18 transition-all duration-300 p-4 bg-gray-100 h-full overflow-y-auto space-y-4">
-  <h1 class="text-4xl font-extrabold">{{ title.getTitle() }}</h1>
-  <div><router-outlet /></div>
+  class="ml-18 transition-all duration-300 p-4 bg-gray-100 h-full overflow-y-auto space-y-4"><router-outlet />
 </main>

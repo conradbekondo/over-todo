@@ -10,7 +10,7 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'todos',
+    path: 'tasks',
     title: 'All Tasks',
     loadComponent: () =>
       import('./pages/todos-page/todos-page.component').then(
@@ -27,7 +27,7 @@ export const routes: Routes = [
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   {
-    title: 'Resource not found',
+    title: 'Page or resource not found',
     path: '**',
     loadComponent: () =>
       import('./pages/not-found-page/not-found-page.component').then(

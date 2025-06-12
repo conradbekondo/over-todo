@@ -30,7 +30,7 @@ export class AppComponent {
     },
     {
       icon: ListChecks,
-      path: 'todos',
+      path: 'tasks',
       label: 'All Tasks',
     },
     {
