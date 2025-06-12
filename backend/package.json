@@ -1,25 +1,15 @@
 {
-  "name": "backend",
-  "version": "1.0.50",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts",
-    "migrate.local": "bunx drizzle-kit generate && bunx drizzle-kit migrate",
-    "migrate": "bunx drizzle-kit migrate",
-    "start": "bun run src/index.ts"
-  },
-  "dependencies": {
-    "@elysiajs/cors": "^1.3.3",
-    "@elysiajs/swagger": "^1.3.0",
-    "better-auth": "^1.2.9",
-    "drizzle-orm": "^0.44.2",
-    "elysia": "latest",
-    "pg": "^8.16.0",
-    "winston": "^3.17.0"
+    "build": "nitro build",
+    "dev": "nitro dev",
+    "prepare": "nitro prepare",
+    "preview": "node .output/server/index.mjs"
   },
   "devDependencies": {
-    "bun-types": "latest",
-    "drizzle-kit": "^0.31.1"
+    "nitropack": "latest"
   },
-  "module": "src/index.js"
+  "dependencies": {
+    "pg": "^8.16.0"
+  }
 }
