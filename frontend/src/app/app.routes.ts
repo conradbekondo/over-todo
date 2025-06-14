@@ -1,7 +1,19 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './guards/auth.guard';
+
+const signedInGuard = authGuard('/auth/connect');
 
 export const routes: Routes = [
   {
+    path: 'auth/connect',
+    title: 'Connect to your Account',
+    loadComponent: () =>
+      import('./pages/login-page/login-page.component').then(
+        (m) => m.LoginPageComponent
+      ),
+  },
+  {
+    canActivate: [signedInGuard],
     path: 'settings',
     title: 'Settings',
     loadComponent: () =>
@@ -11,6 +23,7 @@ export const routes: Routes = [
   },
   {
     path: 'tasks',
+    canActivate: [signedInGuard],
     title: 'All Tasks',
     loadComponent: () =>
       import('./pages/todos-page/todos-page.component').then(
@@ -19,6 +32,7 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
+    canActivate: [signedInGuard],
     title: 'Overview',
     loadComponent: () =>
       import('./pages/dashboard-page/dashboard-page.component').then(

@@ -1,0 +1,5 @@
+@reference "tailwindcss";
+
+:host {
+    @apply flex gap-4 items-start;
+}

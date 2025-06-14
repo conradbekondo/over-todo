@@ -1,0 +1,117 @@
+<div
+    class="bg-white space-y-4 border-2 border-gray-300 dark:border-gray-700 rounded-md shadow-md dark:bg-[rgb(27,27,31)]">
+    <div class="mx-4 mt-4 mb-2 space-y-2">
+        <h1 class=" text-2xl font-bold text-gray-700 dark:text-inherit">Connect to Your Account</h1>
+    </div>
+    <div class="grid grid-cols-2">
+        <button [ngClass]="{
+            'border-purple-400 dark:border-purple-700 font-bold text-purple-400': signingIn(),
+            'border-transparent dark:border-transparent': !signingIn()
+        }" class="py-2 border border-x-0 border-t-0" (click)="signingIn.set(true)">Sign in</button>
+        <button (click)="signingIn.set(false)" [ngClass]="{
+            'border-purple-400 dark:border-purple-700 font-bold text-purple-500': !signingIn(),
+            'border-transparent dark:border-transparent': signingIn()
+        }" class="py-2 border border-x-0 border-t-0">Sign
+            up</button>
+    </div>
+    <div class="mx-4 mb-4">
+        <ng-container [ngTemplateOutlet]="signingIn() ? signInFormTemplate : signUpFormTemplate" />
+    </div>
+</div>
+
+<ng-template #signUpFormTemplate>
+    <form (ngSubmit)="onSignUpFormSubmitted($event)" [formGroup]="signUpForm" class="space-y-3">
+        <div class="space-y-1">
+            <label for="names">Names</label>
+            <input formControlName="names" type="text" id="names">
+            @if(signUpForm.controls.names.dirty && signUpForm.controls.names.invalid) {
+            <span class="invalid-feedback">
+                This field is required
+            </span>
+            }
+        </div>
+        <div class="space-y-1">
+            <label for="email">Email address</label>
+            <input formControlName="email" autocomplete="off" id="email" type="email">
+            @if(signUpForm.controls.email.dirty && signUpForm.controls.email.invalid) {
+            <span class="invalid-feedback">
+                @if(signUpForm.controls.email.hasError('required')) {
+                This field is required
+                }@else if (signUpForm.controls.email.hasError('email')) {
+                Invalid email address
+                }
+            </span>
+            }
+        </div>
+        <div class="space-y-1">
+            <label for="password">Password</label>
+            <input formControlName="password" autocomplete="new-password" id="password" type="password"
+                class="border border-gray-400">
+            @if(signUpForm.controls.password.dirty && signUpForm.controls.password.invalid) {
+            <span class="invalid-feedback">
+                @if(signUpForm.controls.password.hasError('required')) {
+                This field is required
+                }@else if (signUpForm.controls.password.hasError('minlength')) {
+                Password must be at least {{ signUpForm.controls.password.getError('minlength').requiredLength }}
+                characters long
+                }
+            </span>
+            }
+        </div>
+        <label for="tCAgreement"><input formControlName="tCAgreement" type="checkbox" id="tCAgreement"> I agree to all
+            <a routerLink="/terms-and-conditions" class="text-purple-500">Terms and
+                Conditions</a>.</label>
+        <ng-container [ngTemplateOutlet]="submissionButton" [ngTemplateOutletContext]="{
+            $implicit: signUpForm,
+            label: 'Sign up'
+        }" />
+    </form>
+</ng-template>
+
+<ng-template #signInFormTemplate>
+    <form (ngSubmit)="onSignInFormSubmit($event)" [formGroup]="signInForm" class="space-y-3">
+        <div class="space-y-1">
+            <label for="email">Email address</label>
+            <input formControlName="email" autocomplete="username" id="email" type="email">
+            @if(signInForm.controls.email.dirty && signInForm.controls.email.invalid) {
+            <span class="invalid-feedback">
+                @if(signInForm.controls.email.hasError('required')) {
+                This field is required
+                }@else if (signInForm.controls.email.hasError('email')) {
+                Invalid email address
+                }
+            </span>
+            }
+        </div>
+        <div class="space-y-1">
+            <label for="password">Password</label>
+            <input formControlName="password" autocomplete="current-password" id="password" type="password"
+                class="border border-gray-400">
+            @if(signInForm.controls.password.dirty && signInForm.controls.password.invalid) {
+            <span class="invalid-feedback">
+                @if(signInForm.controls.password.hasError('required')) {
+                This field is required
+                }@else if (signInForm.controls.password.hasError('minlength')) {
+                Password must be at least {{ signInForm.controls.password.getError('minlength').requiredLength }}
+                characters long
+                }
+            </span>
+            }
+        </div>
+        <ng-container [ngTemplateOutlet]="submissionButton" [ngTemplateOutletContext]="{
+            $implicit: signInForm,
+            label: 'Sign in'
+        }" />
+    </form>
+</ng-template>
+
+<ng-template #submissionButton let-form let-text="label">
+    <button [disabled]="form.invalid || submitting()"
+        class="disabled:bg-gray-300 dark:disabled:bg-gray-600 disabled:text-gray-400 flex justify-center items-center gap-3 w-full transition-colors bg-purple-500 dark:bg-purple-700 dark:hover:bg-purple-800 dark:active:bg-purple-900 hover:bg-purple-600 active:bg-purple-700 outline-none focus:ring-2 focus:ring-purple-600 text-white font-bold rounded-md py-3"
+        type="submit">
+        @if(submitting()) {
+        <lucide-icon [img]="Loader" class="animate-spin" size="18" />
+        }
+        <span>{{text}}</span>
+    </button>
+</ng-template>

@@ -1,0 +1,89 @@
+<form
+    class="group ring-2 ring-transparent focus-within:border-none focus-within:ring-purple-500 border rounded-md border-gray-500"
+    (ngSubmit)="onFormSubmit($event)" [formGroup]="form">
+    <div class="grid grid-cols-[1fr_auto] gap-x-3 px-3">
+        <input [class.mt-3]="expanded()" formControlName="title" placeholder="Enter the title of a Task"
+            class="block text-2xl outline-none placeholder:font-extrabold font-extrabold placeholder:text-gray-400 text-gray-600 dark:text-inherit w-full">
+        <div class="flex items-center justify-center gap-4">
+            @if(!expanded()) {
+            <button [disabled]="form.invalid" type="submit"
+                class="my-2 py-2 active:bg-purple-800 disabled:bg-gray-300 dark:disabled:bg-gray-600 disabled:text-gray-400 outline-none focus:ring-2 focus:ring-purple-700 flex items-center gap-1 w-full text-sm col-span-2 bg-purple-600 font-medium rounded-md px-4 cursor-pointer hover:bg-purple-700 transition-colors">
+                @if(submitting()) {
+                <lucide-icon [img]="Loader" class="animate-spin" size="18" />
+                }
+                <span>
+                    @if(submitting()){
+                    Finishing
+                    }@else {Finish}
+                </span>
+            </button>
+            }
+            <button type="button"
+                class="outline-none text-purple-400 focus:text-purple-500 cursor-pointer group font-semibold inline-flex items-center gap-3 text-lg"
+                (click)="expanded.set(!expanded())">
+                <span>
+                    @if(!expanded()) {
+                    More
+                    }@else {
+                    Less
+                    }
+                </span>
+                @if(!expanded()) {
+                <lucide-icon [img]="ChevronDown" size="25" />
+                } @else {
+                <lucide-icon [img]="ChevronUp" size="25" />
+                }
+            </button>
+        </div>
+        @if(expanded()) {
+        <div class="grid grid-cols-2 gap-y-3 gap-x-10 px-5 py-3 w-3/4 mx-auto">
+            <div class="space-y-1">
+                <label for="due-date" class="block font-semibold">Due date</label>
+                <input formControlName="dueDate" class="block w-full border border-gray-400 p-3 rounded-md"
+                    id="due-date" type="datetime-local" [min]="minDate | date:'yyyy-MM-ddTHH:mm'">
+            </div>
+            <div class="space-y-1">
+                <label for="priority" class="block font-semibold">Priority</label>
+                <select formControlName="priority" id="priority"
+                    class="block w-full border border-gray-400 p-3 rounded-md">
+                    <option [value]="null">Normal</option>
+                    <option value="high">High</option>
+                    <option value="low">Low</option>
+                </select>
+            </div>
+            <div class="space-y-1" >
+                <label for="reminder" class="block font-semibold">Reminder</label>
+                <select [disabled]="!form.value.dueDate" formControlName="reminder" name="reminder" id="reminder"
+                    class="block w-full border border-gray-400 p-3 rounded-md">
+                    <option [value]="null">Not set</option>
+                    <option value="30m">30m before</option>
+                    <option value="1h">1h before</option>
+                    <option value="1h30m">1h 30m before</option>
+                    <option value="2h">2h before</option>
+                    <option value="1d">1 day before</option>
+                </select>
+            </div>
+            <div class="space-y-1">
+                <label for="category" class="block font-semibold">Category</label>
+                <input type="text" formControlName="category" id="category"
+                    class="block w-full border border-gray-400 p-3 rounded-md">
+            </div>
+            <div class="col-span-2 space-y-1">
+                <label for="description" class="block font-semibold">Description</label>
+                <textarea formControlName="description" name="description" id="description" rows="3"
+                    class="w-full inline-block border border-gray-400 rounded-md outline-none ring-1 ring-transparent focus:ring-purple-500 p-3"></textarea>
+            </div>
+            <button [disabled]="form.invalid" type="submit"
+                class="disabled:bg-gray-300 dark:disabled:bg-gray-600 disabled:text-gray-400 flex justify-center items-center gap-2 w-full col-span-2 bg-purple-600 font-bold rounded-md p-3 cursor-pointer hover:bg-purple-700 active:bg-purple-800 transition-colors outline-none focus:ring-2 focus:ring-purple-700">
+                @if(submitting()) {
+                <lucide-icon [img]="Loader" class="animate-spin" size="18" />
+                }
+                <span>@if(submitting()){
+                    Finishing
+                    }@else {Finish}
+                </span>
+            </button>
+        </div>
+        }
+    </div>
+</form>

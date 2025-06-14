@@ -1,6 +1,7 @@
+@if(signedIn()) {
 <div
   class="py-4 text-white fixed left-0 top-0 h-full gap-3 grid grid-rows-[auto_1fr_auto] bg-gradient-to-bl from-purple-500 to-pink-500 w-18 transition-all"
-  (mouseover)="sideMenuOpen.set(true)" [class.text-center]="sideMenuOpen()" [class.w-44]="sideMenuOpen()"
+  (mouseover)="sideMenuOpen.set(true)" [class.text-center]="sideMenuOpen()" [class.w-48]="sideMenuOpen()"
   (mouseleave)="sideMenuOpen.set(false)">
   <a routerLink="/" class="inline-flex gap-3 justify-center mx-3">
     <lucide-icon [img]="ListCheck" size="25" />
@@ -35,9 +36,6 @@
     @if(sideMenuOpen()) {
     <div class="flex items-center gap-3 mx-4" [class.justify-center]="!sideMenuOpen()"
       [class.justify-start]="sideMenuOpen()">
-      <!-- <button class="text-gray-200 cursor-pointer">
-        <lucide-icon [img]="Settings" size="18"></lucide-icon>
-      </button> -->
       <button
         class="border border-transparent hover:border-white w-full flex gap-3 justify-center items-center text-gray-200 cursor-pointer rounded-md p-2 transition-colors">
         <lucide-icon [img]="LogOut" size="18"></lucide-icon>
@@ -49,6 +47,14 @@
     }
   </div>
 </div>
-<main [class.ml-44]="sideMenuOpen()"
-  class="ml-18 transition-all duration-300 p-4 bg-gray-100 h-full overflow-y-auto space-y-4"><router-outlet />
+<main [class.ml-48]="sideMenuOpen()"
+  class="ml-18 transition-all duration-300 px-4 pb-4 pt-2 h-full grid grid-rows-[1fr_auto]">
+  <div class="overflow-y-auto">
+    <router-outlet />
+  </div>
+  <p class="text-center font-extrabold text-gray-400">{{ currentTime()?.toLocaleTimeString()}}</p>
+
 </main>
+} @else {
+<router-outlet />
+}

@@ -1,5 +1,9 @@
 @reference "tailwindcss";
 
+:host {
+  @apply bg-gray-100 dark:bg-[rgb(27,27,31)] dark:text-slate-200;
+}
+
 .active-route {
   @apply font-bold opacity-100 bg-purple-600;
 }

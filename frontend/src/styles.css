@@ -10,3 +10,15 @@ body {
 ot-root {
   @apply block h-full;
 }
+
+option {
+  @apply dark:text-black;
+}
+
+button {
+  @apply cursor-pointer;
+}
+
+button:disabled {
+  @apply cursor-not-allowed;
+}
