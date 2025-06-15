@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, gt } from "drizzle-orm";
+import { and, asc, count, desc, eq, gt } from "drizzle-orm";
 import { TaskDtoSchema, TaskFetchParamsSchema } from "~/models/schemas";
 
 export default defineEventHandler({
@@ -8,14 +8,22 @@ export default defineEventHandler({
     const {
       user: { id: owner },
     } = useAuth(event);
-    const { limit, after } = TaskFetchParamsSchema.parse(getQuery(event));
+    const { limit, page } = TaskFetchParamsSchema.parse(getQuery(event));
+    const filter = eq(tasks.owner, owner);
 
-    return await db
+    const data = await db
       .select()
       .from(tasks)
-      .where(and(eq(tasks.owner, owner), gt(tasks.createdAt, after)))
+      .where(filter)
       .orderBy(desc(tasks.updatedAt), asc(tasks.dueDate))
+      .offset(page * limit)
       .limit(limit)
       .then((values) => values.map((v) => TaskDtoSchema.parse(v)));
+
+    const [{ total }] = await db
+      .select({ total: count(filter) })
+      .from(tasks);
+
+    return { data, total, size: limit, page };
   },
 });

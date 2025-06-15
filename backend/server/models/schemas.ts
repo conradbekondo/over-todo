@@ -2,11 +2,17 @@ import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
 export const TaskFetchParamsSchema = z.object({
-  after: z
-    .union([z.string().date().optional(), z.date().optional()])
+  page: z
+    .union([
+      z
+        .string()
+        .regex(/^[0-9]+$/, "Invalid number")
+        .optional(),
+      z.number().positive().optional(),
+    ])
     .transform((v) => {
-      if (!v) return new Date(Date.now() - 3_600_000 * 48);
-      else if (typeof v == "string") return new Date(Date.parse(v));
+      if (!v) return 0;
+      else if (typeof v == "string") return Math.max(0, parseInt(v, 10));
       return v;
     }),
   limit: z

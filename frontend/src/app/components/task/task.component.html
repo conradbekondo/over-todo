@@ -1,11 +1,12 @@
-<details (toggle)="onDetailsToggled()" #details class="transition-all group w-full">
+<details #details class="transition-all group w-full">
     <summary
-        class="flex items-center gap-3 marker:list-none group-open:border group-open:border-x-0 group-open:border-t-0 group-open:border-gray-300 group-open:dark:border-gray-700 p-2">
-        <label class="control control-checkbox m-0 w-full inline-block">
+        class="flex items-center gap-3 marker:list-none group-open:border group-open:border-x-0 group-open:border-t-0 group-open:border-gray-300 group-open:dark:border-gray-700 p-2 pointer-events-none">
+        <label class="control control-checkbox m-0 w-full inline-block pointer-events-auto">
             <p [ngClass]="{
             'line-through': completed()
         }" class="cursor-pointer text-lg">{{ task().title }}</p>
-            <input (change)="onCompletionInputChecked($any($event.target).checked)" type="checkbox" [checked]="completed()" />
+            <input (change)="onCompletionInputChecked($any($event.target).checked)" type="checkbox"
+                [checked]="completed()" />
             <div class="control_indicator"></div>
         </label>
         <div class="flex justify-between items-center w-full">
@@ -21,11 +22,16 @@
                 }" [title]="task().dueDate | date:'dd/MM/yyyy HH:mm'">
                     @if(task().dueDate && !completed()) {
                     Due {{ dueDateFormat() }}
-                    }@else {
-                    Completed
                     }
                 </span>
-                <lucide-icon class="cursor-pointer" [img]="ChevronDown" size="18" />
+                <button (click)="onDeleteButtonClicked($event)"
+                    class="outline-none focus:text-purple-500 cursor-pointer pointer-events-auto">
+                    <lucide-icon [img]="DeleteIcon" size="18" />
+                </button>
+                <button class="outline-none focus:text-purple-500 cursor-pointer pointer-events-auto"
+                    (click)="onToggleButtonClicked()">
+                    <lucide-icon [img]="ChevronDown" size="18" />
+                </button>
             </div>
         </div>
     </summary>

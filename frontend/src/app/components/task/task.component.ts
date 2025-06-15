@@ -10,12 +10,12 @@ import {
   output,
   viewChild,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { differenceInHours, formatDistanceToNow } from 'date-fns';
 import {
   ChevronDown,
   ClockAlert,
   LucideAngularModule,
+  Trash2Icon,
   TriangleAlert,
 } from 'lucide-angular';
 import { Task } from '../../../models/types';
@@ -40,7 +40,7 @@ export class ToggleGroup {
   toggle(t: Toggle) {
     t.toggle(!t.isToggled());
     for (const toggle of this.toggles.values()) {
-      if (t.getId() === toggle.getId() || !toggle.isToggled()) continue;
+      if (t.getId() === toggle.getId()) continue;
       toggle.toggle(false);
     }
   }
@@ -54,6 +54,8 @@ export class ToggleGroup {
 })
 export class TaskComponent implements Toggle, OnDestroy {
   readonly ChevronDown = ChevronDown;
+  readonly DeleteIcon = Trash2Icon;
+  readonly onDeleted = output();
   readonly completionStatusChanged = output<boolean>();
   readonly task = input.required<Task>();
   readonly completed = linkedSignal(() => this.task().completed);
@@ -82,8 +84,6 @@ export class TaskComponent implements Toggle, OnDestroy {
   });
   readonly group = input<ToggleGroup>();
   readonly details = viewChild<ElementRef<HTMLDetailsElement>>('details');
-  private eventTriggeredToggle = false;
-  private groupTriggeredToggle = false;
 
   constructor() {
     effect(() => {
@@ -101,27 +101,26 @@ export class TaskComponent implements Toggle, OnDestroy {
     return this.task().id!;
   }
 
-  isToggled = computed(() => {
+  isToggled() {
     return this.details()?.nativeElement?.open ?? false;
-  });
+  }
+
+  onToggleButtonClicked() {
+    this.group()?.toggle(this);
+  }
 
   toggle(v: boolean): void {
-    if (this.eventTriggeredToggle) return;
-    this.groupTriggeredToggle = true;
     const details = this.details();
     if (!details) return;
     details.nativeElement.open = v;
-    this.groupTriggeredToggle = false;
-  }
-
-  onDetailsToggled() {
-    if (this.groupTriggeredToggle) return;
-    this.eventTriggeredToggle = true;
-    this.group()?.toggle(this);
-    this.eventTriggeredToggle = false;
   }
 
   onCompletionInputChecked(arg: boolean) {
     this.completionStatusChanged.emit(arg);
+  }
+
+  onDeleteButtonClicked(ev: Event) {
+    ev.preventDefault();
+    this.onDeleted.emit();
   }
 }

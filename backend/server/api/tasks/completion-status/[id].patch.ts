@@ -33,7 +33,7 @@ export default defineEventHandler({
 
       setResponseStatus(
         event,
-        result.rowCount == 0 ? 400 : 202,
+        result.rowCount == 0 ? 404 : 202,
         result.rowCount == 0 ? "Not Found" : "Accepted"
       );
     });

@@ -39,7 +39,7 @@ export const routes: Routes = [
         (m) => m.DashboardPageComponent
       ),
   },
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: 'overview', pathMatch: 'full' },
   {
     title: 'Page or resource not found',
     path: '**',
