@@ -100,3 +100,12 @@ export const verifications = pgTable("verifications", {
     () => /* @__PURE__ */ new Date()
   ),
 });
+
+export const preferences = pgTable("user_preferences", {
+  id: text()
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" })
+    .primaryKey(),
+  notifyMeUsingEmails: boolean().default(false),
+  notifyMeUsingSms: boolean().default(false),
+});

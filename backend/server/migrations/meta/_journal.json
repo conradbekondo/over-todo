@@ -15,6 +15,20 @@
       "when": 1750014054577,
       "tag": "0001_curious_genesis",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1750026553338,
+      "tag": "0002_hesitant_mindworm",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1750026583360,
+      "tag": "0003_serious_joshua_kane",
+      "breakpoints": true
     }
   ]
 }
