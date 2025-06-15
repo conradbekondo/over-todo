@@ -16,9 +16,12 @@
         }
     </div>
 </section>
-<p class="text-center">Task completion rate: <span class="font-bold">{{ ((stats.value()?.completed ?? 0) /
+@if (((stats.value()?.completed ?? 0) /
+(stats.value()?.created ?? 1)) != 0) {
+<p class="text-center"><span class="font-bold">{{ ((stats.value()?.completed ?? 0) /
         (stats.value()?.created ?? 1))|
-        percent }}</span></p>
+        percent }} of Tasks completed </span></p>
+}
 <section class="flex justify-center">
     <a routerLink="/tasks" class="text-center text-purple-500 font-medium">See more</a>
 </section>

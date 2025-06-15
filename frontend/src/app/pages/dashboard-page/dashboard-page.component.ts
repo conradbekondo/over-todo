@@ -9,7 +9,6 @@ import { environment } from '../../../environments/environment.development';
 import { GreetingComponent } from '../../components/greeting/greeting.component';
 import { ClockService } from '../../services/clock.service';
 import { principal } from '../../state/selectors';
-import { map, mergeMap, toArray } from 'rxjs';
 
 const StatsSchema = z.object({
   created: z.number(),

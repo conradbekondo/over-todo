@@ -39,6 +39,15 @@ export const routes: Routes = [
         (m) => m.DashboardPageComponent
       ),
   },
+  {
+    path: 'notifications',
+    canActivate: [signedInGuard],
+    title: 'Notification',
+    loadComponent: () =>
+      import('./pages/notifications-page/notifications-page.component').then(
+        (m) => m.NotificationsPageComponent
+      ),
+  },
   { path: '', redirectTo: 'overview', pathMatch: 'full' },
   {
     title: 'Page or resource not found',
