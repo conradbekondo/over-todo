@@ -5,7 +5,7 @@
 @defer(when !stats.isLoading()) {
 <section>
     <div class="flex justify-evenly flex-wrap">
-        @for(stat of stats.value(); track $index) {
+        @for(stat of data(); track $index) {
         <div class="space-y-2">
             <p class="text-gray-400 text-center dark:text-gray-200 text-[150px] font-extrabold">{{ stat.value | number
                 }}
@@ -16,6 +16,9 @@
         }
     </div>
 </section>
+<p class="text-center">Task completion rate: <span class="font-bold">{{ ((stats.value()?.completed ?? 0) /
+        (stats.value()?.created ?? 1))|
+        percent }}</span></p>
 <section class="flex justify-center">
     <a routerLink="/tasks" class="text-center text-purple-500 font-medium">See more</a>
 </section>

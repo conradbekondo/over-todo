@@ -1,6 +1,6 @@
-import { AsyncPipe, DecimalPipe } from '@angular/common';
+import { AsyncPipe, DecimalPipe, PercentPipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { select } from '@ngxs/store';
@@ -20,7 +20,7 @@ type Stats = z.infer<typeof StatsSchema>;
 
 @Component({
   selector: 'ot-dashboard-page',
-  imports: [GreetingComponent, DecimalPipe, AsyncPipe, RouterLink],
+  imports: [GreetingComponent, PercentPipe, DecimalPipe, AsyncPipe, RouterLink],
   templateUrl: './dashboard-page.component.html',
   styleUrl: './dashboard-page.component.css',
 })
@@ -30,13 +30,13 @@ export class DashboardPageComponent {
   private http = inject(HttpClient);
   readonly stats = rxResource({
     loader: () => {
-      return this.http
-        .get<Stats>(`${environment.apiOrigin}/api/tasks/stats`)
-        .pipe(
-          mergeMap((v) => Object.entries(v)),
-          map(([k, v]) => ({ name: k, value: v })),
-          toArray()
-        );
+      return this.http.get<Stats>(`${environment.apiOrigin}/api/tasks/stats`);
     },
+  });
+
+  readonly data = computed(() => {
+    const stats = this.stats.value();
+    if (!stats) return [];
+    return Object.entries(stats).map(([k, v]) => ({ name: k, value: v }));
   });
 }
