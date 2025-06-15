@@ -29,6 +29,7 @@ export const TaskDtoSchema = createSelectSchema(tasks).omit({
   fcmSentAt: true,
   fcmStatus: true,
   owner: true,
+  completedAt: true,
 });
 
 export const CredentialSignUpSchema = z.object({

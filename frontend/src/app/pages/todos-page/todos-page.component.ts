@@ -26,16 +26,7 @@ export class TodosPageComponent {
   private readonly http = inject(HttpClient);
   private readonly clockService = inject(ClockService);
   readonly principal = select(principal);
-  readonly timeOfDay = toSignal(
-    this.clockService.currentTime$.pipe(
-      map((time) => {
-        if (time.getHours() >= 19 || time.getHours() < 5) return 'night';
-        else if (time.getHours() < 12) return 'morning';
-        else if (time.getHours() < 16) return 'afternoon';
-        else return 'evening';
-      })
-    )
-  );
+  readonly timeOfDay = toSignal(this.clockService.timeOfDay$);
   readonly tasks = rxResource({
     loader: () => {
       return this.http.get(`${environment.apiOrigin}/api/tasks`).pipe(

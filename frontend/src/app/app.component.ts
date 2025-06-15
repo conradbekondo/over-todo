@@ -44,8 +44,8 @@ export class AppComponent {
   routes = [
     {
       icon: LayoutDashboard,
-      path: 'dashboard',
-      label: 'Dashboard',
+      path: 'overview',
+      label: 'Overview',
     },
     {
       icon: ListChecks,

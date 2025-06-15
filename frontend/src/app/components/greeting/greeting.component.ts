@@ -12,10 +12,10 @@ import { TimeOfDay, WeatherInfo } from '../../../models/types';
 export class GreetingComponent {
   ThermoMeter = Thermometer;
   readonly userName = input<string>();
-  readonly timeOfDay = input.required<TimeOfDay>();
+  readonly timeOfDay = input<TimeOfDay | null>();
   readonly weatherInfo = resource({
     request: () => this.timeOfDay,
-    loader: async ({ request }) => {
+    loader: async () => {
       return await fetch(
         new URL('/api/weather', environment.apiOrigin)
       ).then<WeatherInfo>((r) => r.json());

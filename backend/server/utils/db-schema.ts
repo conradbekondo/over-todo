@@ -5,7 +5,7 @@ import {
   text,
   timestamp,
   uuid,
-  varchar
+  varchar,
 } from "drizzle-orm/pg-core";
 
 export const accountProviders = pgEnum("account_providers", [
@@ -35,6 +35,7 @@ export const tasks = pgTable("tasks", {
     .notNull()
     .defaultNow()
     .$onUpdate(() => new Date()),
+  completedAt: timestamp({ mode: "date" }),
   owner: text()
     .notNull()
     .references(() => users.id, { onDelete: "set null" }),

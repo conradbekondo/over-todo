@@ -31,7 +31,7 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'dashboard',
+    path: 'overview',
     canActivate: [signedInGuard],
     title: 'Overview',
     loadComponent: () =>

@@ -27,6 +27,7 @@ export default defineEventHandler({
         .update(tasks)
         .set({
           completed: data.status,
+          completedAt: data.status ? new Date() : null,
         })
         .where(and(eq(tasks.owner, user.id), eq(tasks.id, id)));
 
