@@ -1,6 +1,7 @@
+<!-- <ngx-sonner-toaster [position]="isHandheld() ? 'top-center' : 'bottom-right'"/> -->
 @if(signedIn()) {
 <div
-  class="py-4 text-white fixed left-0 top-0 h-full gap-3 grid grid-rows-[auto_1fr_auto] bg-gradient-to-bl from-purple-500 to-pink-500 w-18 transition-all"
+  class="py-4 text-white fixed left-0 top-0 h-full gap-3 grid grid-rows-[auto_1fr_auto] bg-purple-500 w-18 transition-all"
   (mouseover)="sideMenuOpen.set(true)" [class.text-center]="sideMenuOpen()" [class.w-48]="sideMenuOpen()"
   (mouseleave)="sideMenuOpen.set(false)">
   <a routerLink="/" class="inline-flex gap-3 justify-center mx-3">
@@ -28,8 +29,9 @@
       <lucide-icon [img]="User" size="25" />
       @if(sideMenuOpen()) {
       <div class="space-y-1 text-left">
-        <h3 class="m-0">John Doe</h3>
-        <p class="text-sm text-gray-300">johnexample.com</p>
+        <h3 class="m-0">{{ principal()?.names ?? 'User' }}</h3>
+        <!-- <p class="text-sm text-gray-300 max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">{{
+          principal()?.email ?? 'test@example.com' }}</p> -->
       </div>
       }
     </div>
@@ -52,7 +54,9 @@
   <div class="overflow-y-auto">
     <router-outlet />
   </div>
-  <p class="text-center font-extrabold text-gray-400">{{ currentTime()?.toLocaleTimeString()}}</p>
+  <p
+    class="text-center font-extrabold text-gray-400 pt-3 border border-x-0 border-b-0 border-gray-200 dark:border-gray-700">
+    {{ currentTime()?.toLocaleTimeString()}}</p>
 
 </main>
 } @else {

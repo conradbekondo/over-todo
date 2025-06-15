@@ -1,4 +1,23 @@
+import { isToday } from 'date-fns';
 import { z } from 'zod';
+
+export const TaskSchema = z
+  .object({
+    id: z.string().optional().nullable(),
+    title: z.string().optional().nullable(),
+    dueDate: z.coerce.date().optional().nullable(),
+    priority: z.string().optional().nullable(),
+    reminder: z.string().optional().nullable(),
+    description: z.string().optional().nullable(),
+    category: z.string().optional().nullable(),
+    completed: z.boolean().optional().nullable(),
+    createdAt: z.coerce.date().optional().nullable(),
+    updatedAt: z.coerce.date().optional().nullable(),
+  })
+  .transform((v) => ({
+    ...v,
+    dueToday: v.dueDate ? isToday(v.dueDate) : false,
+  }));
 
 export const CredentialSignUpSchema = z.object({
   names: z.string(),

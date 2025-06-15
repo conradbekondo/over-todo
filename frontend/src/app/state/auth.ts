@@ -1,5 +1,11 @@
-import { inject, Injectable, isDevMode } from '@angular/core';
-import { Action, State, StateContext, StateToken } from '@ngxs/store';
+import { inject, Injectable } from '@angular/core';
+import {
+  Action,
+  NgxsOnInit,
+  State,
+  StateContext,
+  StateToken,
+} from '@ngxs/store';
 import { patch } from '@ngxs/store/operators';
 import { tap } from 'rxjs';
 import { Principal } from '../../models/types';
@@ -18,21 +24,43 @@ type Context = StateContext<AuthStateModel>;
   defaults: { signedIn: false },
 })
 @Injectable()
-export class AuthState {
+export class AuthState implements NgxsOnInit {
   private authService = inject(AuthService);
+
+  ngxsOnInit(ctx: Context): void {
+    this.authService.getSessionInfo().pipe(
+      tap(({ user: { email, name, id, image } }) =>
+        ctx.setState(
+          patch({
+            signedIn: true,
+            userInfo: patch({
+              names: name,
+              id,
+              avatar: image ?? undefined,
+              email,
+            }),
+          })
+        )
+      )
+    );
+  }
 
   @Action(CredentialSignIn)
   onCredentialSignIn(ctx: Context, { captchaToken, input }: CredentialSignIn) {
     return this.authService.credentialSignIn(captchaToken, input).pipe(
-      tap((res) => {
-        if (isDevMode()) {
-          return ctx.setState(
-            patch({
-              signedIn: true,
-            })
-          );
-        }
-      })
+      tap(({ user: { email, name, id, image } }) =>
+        ctx.setState(
+          patch({
+            signedIn: true,
+            userInfo: patch({
+              names: name,
+              id,
+              avatar: image ?? undefined,
+              email,
+            }),
+          })
+        )
+      )
     );
   }
 

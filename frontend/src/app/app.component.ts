@@ -14,15 +14,28 @@ import {
 import { ClockService } from './services/clock.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { select } from '@ngxs/store';
-import { isUserSignedIn } from './state/selectors';
+import { isUserSignedIn, principal } from './state/selectors';
+import { NgxSonnerToaster } from 'ngx-sonner';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { map, tap } from 'rxjs';
 
 @Component({
   selector: 'ot-root',
-  imports: [RouterLink, RouterLinkActive, LucideAngularModule, RouterOutlet],
+  imports: [
+    RouterLink,
+    // NgxSonnerToaster,
+    RouterLinkActive,
+    LucideAngularModule,
+    RouterOutlet,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent {
+  private observer = inject(BreakpointObserver);
+  isHandheld = toSignal(
+    this.observer.observe(Breakpoints.Handset).pipe(map((s) => s.matches))
+  );
   Bell = Bell;
   User = User;
   ListCheck = ListCheck;
@@ -55,4 +68,5 @@ export class AppComponent {
   readonly currentTime = toSignal(this.clockService.currentTime$);
   readonly title = inject(Title);
   readonly signedIn = select(isUserSignedIn);
+  readonly principal = select(principal);
 }

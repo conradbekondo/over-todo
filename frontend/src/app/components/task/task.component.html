@@ -1,0 +1,42 @@
+<details (toggle)="onDetailsToggled()" #details class="transition-all group w-full">
+    <summary
+        class="flex items-center gap-3 marker:list-none group-open:border group-open:border-x-0 group-open:border-t-0 group-open:border-gray-300 group-open:dark:border-gray-700 p-2">
+        <label class="control control-checkbox m-0 w-full inline-block">
+            <p [ngClass]="{
+            'line-through': completed()
+        }" class="cursor-pointer text-lg">{{ task().title }}</p>
+            <input (change)="onCompletionInputChecked($any($event.target).checked)" type="checkbox" [checked]="completed()" />
+            <div class="control_indicator"></div>
+        </label>
+        <div class="flex justify-between items-center w-full">
+            <div></div>
+            <div class="flex items-center gap-3">
+                @if(criticalIcon()) {
+                <lucide-icon class="text-{{iconColor()}}-500" class="text-{{iconColor()}}-500" [img]="criticalIcon()!"
+                    size="18" />
+                }
+                <span class="text-sm" [ngClass]="{
+                    'text-gray-400': !completed(),
+                    'text-green-500': completed()
+                }" [title]="task().dueDate | date:'dd/MM/yyyy HH:mm'">
+                    @if(task().dueDate && !completed()) {
+                    Due {{ dueDateFormat() }}
+                    }@else {
+                    Completed
+                    }
+                </span>
+                <lucide-icon class="cursor-pointer" [img]="ChevronDown" size="18" />
+            </div>
+        </div>
+    </summary>
+    <dl class="mx-2 grid grid-cols-[auto_1fr] gap-x-3">
+        <dt>Description</dt>
+        <dd> {{ task().description ?? 'N/A' }}</dd>
+        <dt>Priority</dt>
+        <dd class="capitalize"> {{ task().priority ?? 'N/A' }}</dd>
+        <dt>Reminder</dt>
+        <dd>{{ task().reminder ? task().reminder + ' before' : 'N/A' }}</dd>
+        <dt>Category</dt>
+        <dd>{{ task().category ?? 'N/A' }}</dd>
+    </dl>
+</details>

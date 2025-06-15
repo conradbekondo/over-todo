@@ -20,6 +20,6 @@ export class CredentialSignUp {
   ) {}
 }
 
-export class AccessTokenExpired {
+export class SignedOut {
   static type = `${prefix} signed out`;
 }

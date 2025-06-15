@@ -1,38 +1,41 @@
-import { randomUUID } from "crypto";
 import { fromError } from "zod-validation-error";
-import { NewTodoSchema } from "~/models/schemas";
+import { NewTodoSchema, TaskDtoSchema } from "~/models/schemas";
+import { useAuth } from "~/utils/auth";
 
-export default defineEventHandler(async (event) => {
-  const body = await readBody(event);
-  const { success, error, data } = NewTodoSchema.safeParse(body);
-  if (!success)
-    throw createError({
-      statusCode: 400,
-      message: fromError(error).message,
-      cause: error,
+export default defineEventHandler({
+  onRequest: [requireAuth],
+  handler: async (event) => {
+    const body = await readBody(event);
+    const { success, error, data } = NewTodoSchema.safeParse(body);
+    if (!success)
+      throw createError({
+        statusCode: 400,
+        message: fromError(error).message,
+        cause: error,
+      });
+
+    const db = await useDrizzle();
+    const { title, category, description, dueDate, priority, reminder } = data;
+    const {
+      user: { id: owner },
+    } = useAuth(event);
+
+    return await db.transaction(async (tx) => {
+      const result = await tx
+        .insert(tasks)
+        .values({
+          owner,
+          title,
+          category,
+          description,
+          dueDate,
+          priority,
+          reminder,
+        })
+        .returning()
+        .then((v) => v.map((x) => TaskDtoSchema.parse(x)));
+      setResponseStatus(event, 201, "Created");
+      return result;
     });
-
-  const nitroDb = useDatabase();
-  const { title, category, description, dueDate, priority, reminder } = data;
-
-  await nitroDb.sql`
-    INSERT INTO 
-      tasks(
-      "title",
-      "category",
-      "description",
-      "dueDate",
-      "priority",
-      "reminder",
-      "owner"
-    ) VALUES (
-      ${title}, 
-      ${category}, 
-      ${description}, 
-      ${dueDate.toUTCString()}, 
-      ${priority}, 
-      ${reminder}, 
-      ${randomUUID()}
-    );
-    `;
+  },
 });

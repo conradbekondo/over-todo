@@ -1,5 +1,5 @@
-import { DatePipe, formatDate } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { DatePipe, formatDate, NgTemplateOutlet } from '@angular/common';
+import { Component, inject, output, signal } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -43,6 +43,7 @@ export class NewTaskComponent {
   minDate = new Date();
   submitting = signal(false);
   private todoService = inject(TaskService);
+  readonly created = output();
 
   onFormSubmit(event: SubmitEvent) {
     event.preventDefault();
@@ -56,6 +57,9 @@ export class NewTaskComponent {
         },
         complete: () => {
           this.submitting.set(false);
+          this.created.emit();
+          this.form.reset();
+          this.expanded.set(false);
         },
       });
   }

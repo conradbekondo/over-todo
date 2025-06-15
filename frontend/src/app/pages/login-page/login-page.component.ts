@@ -10,12 +10,12 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { dispatch } from '@ngxs/store';
 import { Loader, LucideAngularModule } from 'lucide-angular';
 import { RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
+import { concatMap } from 'rxjs';
 import {
   CredentialSignInSchema,
   CredentialSignUpSchema,
 } from '../../../models/schemas';
 import { CredentialSignIn, CredentialSignUp } from '../../state/auth.actions';
-import { concatMap } from 'rxjs';
 
 @Component({
   selector: 'ot-login-page',
@@ -67,6 +67,7 @@ export class LoginPageComponent {
         error: (e: Error) => {
           this.submitting.set(false);
           alert(e.message);
+          // toast.error(e.message);
         },
         complete: () => {
           this.submitting.set(false);

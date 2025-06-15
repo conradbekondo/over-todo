@@ -16,9 +16,10 @@ export default defineNitroConfig({
       cors: true,
       headers: {
         "access-control-allow-headers":
-          "Content-Type, Authorization, X-Requested-With, x-recaptcha-token",
-        "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "Content-Type, Authorization, X-Requested-With, x-captcha-response",
+        "access-control-allow-methods": "GET, PATCH, POST, PUT, DELETE, OPTIONS",
         "access-control-allow-origin": process.env.NITRO_FRONTEND_ORIGIN,
+        "access-control-allow-credentials": "true",
       },
     },
   },

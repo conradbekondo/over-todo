@@ -7,7 +7,7 @@
         <div class="flex items-center justify-center gap-4">
             @if(!expanded()) {
             <button [disabled]="form.invalid" type="submit"
-                class="my-2 py-2 active:bg-purple-800 disabled:bg-gray-300 dark:disabled:bg-gray-600 disabled:text-gray-400 outline-none focus:ring-2 focus:ring-purple-700 flex items-center gap-1 w-full text-sm col-span-2 bg-purple-600 font-medium rounded-md px-4 cursor-pointer hover:bg-purple-700 transition-colors">
+                class="my-2 py-2 text-white active:bg-purple-800 disabled:bg-gray-300 dark:disabled:bg-gray-600 disabled:text-gray-400 outline-none focus:ring-2 focus:ring-purple-700 flex items-center gap-1 w-full text-sm col-span-2 bg-purple-600 font-medium rounded-md px-4 cursor-pointer hover:bg-purple-700 transition-colors">
                 @if(submitting()) {
                 <lucide-icon [img]="Loader" class="animate-spin" size="18" />
                 }
@@ -51,7 +51,7 @@
                     <option value="low">Low</option>
                 </select>
             </div>
-            <div class="space-y-1" >
+            <div class="space-y-1">
                 <label for="reminder" class="block font-semibold">Reminder</label>
                 <select [disabled]="!form.value.dueDate" formControlName="reminder" name="reminder" id="reminder"
                     class="block w-full border border-gray-400 p-3 rounded-md">
@@ -74,7 +74,7 @@
                     class="w-full inline-block border border-gray-400 rounded-md outline-none ring-1 ring-transparent focus:ring-purple-500 p-3"></textarea>
             </div>
             <button [disabled]="form.invalid" type="submit"
-                class="disabled:bg-gray-300 dark:disabled:bg-gray-600 disabled:text-gray-400 flex justify-center items-center gap-2 w-full col-span-2 bg-purple-600 font-bold rounded-md p-3 cursor-pointer hover:bg-purple-700 active:bg-purple-800 transition-colors outline-none focus:ring-2 focus:ring-purple-700">
+                class="disabled:bg-gray-300 text-white dark:disabled:bg-gray-600 disabled:text-gray-400 flex justify-center items-center gap-2 w-full col-span-2 bg-purple-600 font-bold rounded-md p-3 cursor-pointer hover:bg-purple-700 active:bg-purple-800 transition-colors outline-none focus:ring-2 focus:ring-purple-700">
                 @if(submitting()) {
                 <lucide-icon [img]="Loader" class="animate-spin" size="18" />
                 }

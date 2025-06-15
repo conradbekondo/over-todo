@@ -1,10 +1,35 @@
-<h1 class="text-md text-gray-400">All Tasks</h1>
-<ot-greeting userName="John Doe" [timeOfDay]="timeOfDay() ?? 'morning'" />
+<ot-greeting [userName]="principal()?.names ?? 'User'" [timeOfDay]="timeOfDay() ?? 'morning'" />
 
-<section class="mx-4">
-    <ot-new-task />
+<section class="md:max-w-3/4 mx-auto">
+    <ot-new-task (created)="tasks.reload()" />
 </section>
 
-<section>
-    <h1>Today's Tasks</h1>
+@defer (when !tasks.isLoading()) {
+<section class="md:max-w-3/4 mx-auto">
+    <h1 class="text-lg font-bold mb-3">Pending Tasks ({{ pendingTasks().length }})</h1>
+    <div class="grid grid-cols-2 gap-3 items-start">
+        @for (task of pendingTasks(); track task.id) {
+        <!-- @if(!task.completed) { -->
+        <ot-task (completionStatusChanged)="onCompletionStatusChanged(task, $event)" [group]="tg" [task]="task" />
+        <!-- } -->
+        }@empty {
+        <p class="text-gray-400 dark:text-gray-600">You currently have no tasks pending</p>
+        }
+    </div>
 </section>
+<section class="md:max-w-3/4 mx-auto">
+    <h1 class="text-lg font-bold mb-3">Completed Tasks ({{ completedTasks().length }})</h1>
+    <div class="grid grid-cols-2 gap-3 items-start">
+        @for (task of completedTasks(); track task.id) {
+        <!-- @if(!task.completed) { -->
+        <ot-task (completionStatusChanged)="onCompletionStatusChanged(task, $event)" [group]="tg" [task]="task" />
+        <!-- } -->
+        }@empty {
+        <p class="text-gray-400 dark:text-gray-600">You currently have no tasks pending</p>
+        }
+    </div>
+</section>
+
+}@placeholder {
+<p class="text-center">Loading Tasks...</p>
+}

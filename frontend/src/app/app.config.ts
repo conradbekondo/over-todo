@@ -5,7 +5,7 @@ import {
 } from '@angular/core';
 import { provideRouter, withViewTransitions } from '@angular/router';
 
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { withNgxsLoggerPlugin } from '@ngxs/logger-plugin';
 import {
@@ -15,6 +15,7 @@ import {
 import { provideStore } from '@ngxs/store';
 import { environment } from '../environments/environment.development';
 import { routes } from './app.routes';
+import { authInterceptor } from './interceptors/auth.interceptor';
 import { provideRecaptcha } from './providers';
 import { AUTH_STATE, AuthState } from './state/auth';
 
@@ -23,7 +24,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withViewTransitions()),
     provideAnimationsAsync(),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([authInterceptor])),
     provideRecaptcha(environment.captchaKey),
     provideStore(
       [AuthState],

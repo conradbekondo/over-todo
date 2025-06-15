@@ -1,17 +1,11 @@
-import { sql } from "drizzle-orm";
 import {
   boolean,
-  interval,
-  jsonb,
   pgEnum,
   pgTable,
-  pgView,
-  primaryKey,
   text,
   timestamp,
-  uniqueIndex,
   uuid,
-  varchar,
+  varchar
 } from "drizzle-orm/pg-core";
 
 export const accountProviders = pgEnum("account_providers", [
@@ -41,75 +35,67 @@ export const tasks = pgTable("tasks", {
     .notNull()
     .defaultNow()
     .$onUpdate(() => new Date()),
-  owner: uuid()
+  owner: text()
     .notNull()
     .references(() => users.id, { onDelete: "set null" }),
 });
 
 export const users = pgTable("users", {
-  id: uuid().notNull().defaultRandom().primaryKey(),
-  names: text().notNull(),
-  email: text().notNull().unique(),
-  createdAt: timestamp({ mode: "date" }).notNull().defaultNow(),
-  updatedAt: timestamp({ mode: "date" })
-    .notNull()
-    .defaultNow()
-    .$onUpdate(() => new Date()),
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull().unique(),
+  emailVerified: boolean("email_verified")
+    .$defaultFn(() => false)
+    .notNull(),
+  image: text("image"),
+  createdAt: timestamp("created_at")
+    .$defaultFn(() => /* @__PURE__ */ new Date())
+    .notNull(),
+  updatedAt: timestamp("updated_at")
+    .$defaultFn(() => /* @__PURE__ */ new Date())
+    .notNull(),
 });
-
-export const accounts = pgTable(
-  "user_accounts",
-  {
-    id: text().notNull().primaryKey(),
-    owner: uuid()
-      .references(() => users.id, { onDelete: "set null" })
-      .notNull(),
-    accessKey: text(),
-    refreshKey: text(),
-    provider: accountProviders().notNull(),
-    passwordHash: text(),
-    username: text(),
-    createdAt: timestamp({ mode: "date" }).notNull().defaultNow(),
-    updatedAt: timestamp({ mode: "date" })
-      .notNull()
-      .defaultNow()
-      .$onUpdate(() => new Date()),
-  },
-  (t) => [uniqueIndex().on(t.username, t.provider)]
-);
 
 export const sessions = pgTable("sessions", {
-  id: text().primaryKey(),
-  owner: uuid()
+  id: text("id").primaryKey(),
+  expiresAt: timestamp("expires_at").notNull(),
+  token: text("token").notNull().unique(),
+  createdAt: timestamp("created_at").notNull(),
+  updatedAt: timestamp("updated_at").notNull(),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  userId: text("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  freshness: interval().notNull(),
-  createdAt: timestamp({ mode: "date" }).defaultNow().notNull(),
-  refreshedAt: timestamp({ mode: "date" }).defaultNow(),
-  updatedAt: timestamp({ mode: "date" })
-    .defaultNow()
-    .$onUpdate(() => new Date())
-    .notNull(),
-  ip: text(),
-  userAgent: text(),
-  platform: text(),
-  data: jsonb(),
 });
 
-export const vwSessions = pgView("vw_user_sessions").as((qb) => {
-  return qb
-    .select({
-      id: sessions.id,
-      owner: sessions.owner,
-      isFresh:
-        sql`(${sessions.refreshedAt} + ${sessions.freshness}) > NOW()`.as(
-          "is_fresh"
-        ),
-      updatedAt: sessions.updatedAt,
-      createdAt: sessions.createdAt,
-      ip: sessions.ip,
-      platform: sessions.platform,
-      data: sessions.data,
-    })
-    .from(sessions);
+export const accounts = pgTable("accounts", {
+  id: text("id").primaryKey(),
+  accountId: text("account_id").notNull(),
+  providerId: text("provider_id").notNull(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  accessToken: text("access_token"),
+  refreshToken: text("refresh_token"),
+  idToken: text("id_token"),
+  accessTokenExpiresAt: timestamp("access_token_expires_at"),
+  refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
+  scope: text("scope"),
+  password: text("password"),
+  createdAt: timestamp("created_at").notNull(),
+  updatedAt: timestamp("updated_at").notNull(),
+});
+
+export const verifications = pgTable("verifications", {
+  id: text("id").primaryKey(),
+  identifier: text("identifier").notNull(),
+  value: text("value").notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
+  createdAt: timestamp("created_at").$defaultFn(
+    () => /* @__PURE__ */ new Date()
+  ),
+  updatedAt: timestamp("updated_at").$defaultFn(
+    () => /* @__PURE__ */ new Date()
+  ),
 });

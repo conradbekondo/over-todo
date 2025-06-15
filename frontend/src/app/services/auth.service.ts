@@ -1,6 +1,6 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { inject, Injectable, isDevMode } from '@angular/core';
-import { catchError, throwError } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { createAuthClient } from 'better-auth/client';
+import { from, of, switchMap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 import {
   CredentialSignInRequest,
@@ -11,38 +11,60 @@ import {
   providedIn: 'root',
 })
 export class AuthService {
-  private http = inject(HttpClient);
+  private readonly betterAuth = createAuthClient({
+    baseURL: environment.apiOrigin,
+  });
 
-  storeToken(token: string, name: string) {
-    if (isDevMode()) {
-      sessionStorage.setItem(name, token);
-    } else {
-      
-    }
+  getSessionInfo() {
+    return from(this.betterAuth.getSession()).pipe(
+      switchMap(({ error, data }) => {
+        if (error) return throwError(() => error);
+        return of(data);
+      })
+    );
   }
 
-  credentialSignIn(captchaToken: string, input: CredentialSignInRequest) {
-    return this.http
-      .post<{ access: string; refresh: string }>(
-        `${environment.apiOrigin}/api/auth/email/sign-in`,
-        input,
-        {
-          headers: { 'x-recaptcha-token': captchaToken },
-        }
-      )
-      .pipe(
-        catchError((e: HttpErrorResponse) => throwError(() => e.error ?? e))
-      );
-  }
-  credentialSignUp(captchaToken: string, input: CredentialSignUpRequest) {
-    return this.http
-      .post(`${environment.apiOrigin}/api/auth/email/sign-up`, input, {
-        headers: {
-          'x-recaptcha-token': captchaToken,
+  credentialSignIn(
+    captchaToken: string,
+    { email, password }: CredentialSignInRequest
+  ) {
+    return from(
+      this.betterAuth.signIn.email({
+        email,
+        password,
+        fetchOptions: {
+          headers: {
+            'x-captcha-response': captchaToken,
+          },
         },
       })
-      .pipe(
-        catchError((e: HttpErrorResponse) => throwError(() => e.error ?? e))
-      );
+    ).pipe(
+      switchMap(({ error, data }) => {
+        if (error) return throwError(() => error);
+        return of(data);
+      })
+    );
+  }
+  credentialSignUp(
+    captchaToken: string,
+    { email, password, names }: CredentialSignUpRequest
+  ) {
+    return from(
+      this.betterAuth.signUp.email({
+        name: names,
+        email,
+        password,
+        fetchOptions: {
+          headers: {
+            'x-captcha-response': captchaToken,
+          },
+        },
+      })
+    ).pipe(
+      switchMap(({ error, data }) => {
+        if (error) return throwError(() => error);
+        return of(data);
+      })
+    );
   }
 }

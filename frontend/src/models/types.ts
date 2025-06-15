@@ -4,6 +4,7 @@ import {
   CredentialSignInSchema,
   CredentialSignUpSchema,
   NewTaskSchema,
+  TaskSchema,
 } from './schemas';
 
 export type TimeOfDay = 'morning' | 'night' | 'afternoon' | 'evening';
@@ -64,9 +65,12 @@ export type Location = {
 export type NewTodoRequest = z.infer<typeof NewTaskSchema>;
 export type CredentialSignUpRequest = z.infer<typeof CredentialSignUpSchema>;
 export type CredentialSignInRequest = z.infer<typeof CredentialSignInSchema>;
+export type Task = z.infer<typeof TaskSchema>;
 
-export type Principal = JwtPayload & {
+export type Principal = {
   names: string;
   email: string;
   avatar?: string;
+  id: string;
 };
+
