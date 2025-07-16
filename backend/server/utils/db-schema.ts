@@ -38,7 +38,7 @@ export const tasks = pgTable("tasks", {
   completedAt: timestamp({ mode: "date" }),
   owner: text()
     .notNull()
-    .references(() => users.id, { onDelete: "set null" }),
+    .references(() => users.id, { onDelete: "cascade" }),
 });
 
 export const users = pgTable("users", {

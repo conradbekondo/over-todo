@@ -1,4 +1,4 @@
-<p class="text-gray-400 dark:text-gray-600">All Tasks</p>
+<p class="text-gray-400 dark:text-gray-400">All Tasks</p>
 <ot-greeting [userName]="principal()?.names ?? 'User'" [timeOfDay]="timeOfDay() ?? 'morning'" />
 
 <section class="md:max-w-3/4 mx-auto">
@@ -16,7 +16,7 @@
                 [group]="tg" [task]="task" />
             <!-- } -->
             }@empty {
-            <p class="text-gray-400 dark:text-gray-600">You currently have no tasks pending</p>
+            <p class="text-gray-400 dark:text-gray-400">You currently have no tasks pending</p>
             }
         </div>
     </section>
@@ -29,7 +29,7 @@
                 [group]="tg" [task]="task" />
             <!-- } -->
             }@empty {
-            <p class="text-gray-400 dark:text-gray-600">You currently have no tasks pending</p>
+            <p class="text-gray-400 dark:text-gray-400">You currently have no tasks pending</p>
             }
         </div>
     </section>

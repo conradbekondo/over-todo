@@ -38,7 +38,7 @@
     @if(sideMenuOpen()) {
     <div class="flex items-center gap-3 mx-4" [class.justify-center]="!sideMenuOpen()"
       [class.justify-start]="sideMenuOpen()">
-      <button
+      <button (click)="onSignOutButtonClicked()"
         class="border border-transparent hover:border-white w-full flex gap-3 justify-center items-center text-gray-200 cursor-pointer rounded-md p-2 transition-colors">
         <lucide-icon [img]="LogOut" size="18"></lucide-icon>
         @if(sideMenuOpen()) {

@@ -8,6 +8,7 @@ import { provideRouter, withViewTransitions } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { withNgxsLoggerPlugin } from '@ngxs/logger-plugin';
+import { withNgxsRouterPlugin } from '@ngxs/router-plugin';
 import {
   SESSION_STORAGE_ENGINE,
   withNgxsStoragePlugin,
@@ -28,6 +29,7 @@ export const appConfig: ApplicationConfig = {
     provideRecaptcha(environment.captchaKey),
     provideStore(
       [AuthState],
+      withNgxsRouterPlugin(),
       withNgxsStoragePlugin({
         keys: [{ key: AUTH_STATE, engine: SESSION_STORAGE_ENGINE }],
       }),

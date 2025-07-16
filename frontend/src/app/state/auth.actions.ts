@@ -4,6 +4,14 @@ import {
 } from '../../models/types';
 
 const prefix = '[auth]';
+
+export class DeleteAccount {
+  static type = `${prefix} delete account`;
+  constructor(readonly password: string) {}
+}
+export class SignOut {
+  static type = `${prefix} sign out`;
+}
 export class CredentialSignIn {
   static type = `${prefix} credential sign in`;
   constructor(
@@ -22,4 +30,5 @@ export class CredentialSignUp {
 
 export class SignedOut {
   static type = `${prefix} signed out`;
+  constructor(readonly redirect?: string) {}
 }

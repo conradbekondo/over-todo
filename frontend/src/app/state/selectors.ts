@@ -5,3 +5,4 @@ const authSelectors = createPropertySelectors(AUTH_STATE);
 
 export const isUserSignedIn = authSelectors.signedIn;
 export const principal = authSelectors.userInfo;
+export const preferences = authSelectors.preferences;

@@ -1,6 +1,9 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { dispatch, select } from '@ngxs/store';
 import {
   Bell,
   LayoutDashboard,
@@ -11,13 +14,10 @@ import {
   Settings,
   User,
 } from 'lucide-angular';
+import { map } from 'rxjs';
 import { ClockService } from './services/clock.service';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { select } from '@ngxs/store';
 import { isUserSignedIn, principal } from './state/selectors';
-import { NgxSonnerToaster } from 'ngx-sonner';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { map, tap } from 'rxjs';
+import { SignOut } from './state/auth.actions';
 
 @Component({
   selector: 'ot-root',
@@ -69,4 +69,11 @@ export class AppComponent {
   readonly title = inject(Title);
   readonly signedIn = select(isUserSignedIn);
   readonly principal = select(principal);
+  private signOut = dispatch(SignOut);
+
+  onSignOutButtonClicked() {
+    this.signOut().subscribe({
+      error: (e: Error) => alert(e.message),
+    });
+  }
 }

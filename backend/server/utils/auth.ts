@@ -1,6 +1,6 @@
 import { betterAuth, Session, User } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { captcha, openAPI } from "better-auth/plugins";
+import { captcha, createAuthMiddleware, openAPI } from "better-auth/plugins";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { EventHandler, H3Event } from "h3";
 import { Pool } from "pg";
@@ -11,6 +11,25 @@ const db = drizzle(pool, { schema });
 
 export const auth = betterAuth({
   emailAndPassword: { enabled: true },
+  user: { deleteUser: { enabled: true } },
+  hooks: {
+    after: createAuthMiddleware(async (ctx) => {
+      if (!ctx.path.startsWith("/sign-up")) return;
+
+      if (ctx.context.newSession) {
+        const userId =
+          ctx.context.newSession.session.userId ??
+          ctx.context.newSession.user.id;
+
+        await db.transaction((tx) =>
+          tx
+            .insert(preferences)
+            .values({ id: userId })
+            .onConflictDoNothing({ target: [preferences.id] })
+        );
+      }
+    }),
+  },
   database: drizzleAdapter(db, { provider: "pg", usePlural: true }),
   plugins: [
     openAPI(),

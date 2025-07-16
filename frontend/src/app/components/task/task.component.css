@@ -9,7 +9,7 @@ dt {
 }
 
 .control {
-  font-family: arial;
+  /* font-family: arial; */
   display: flex;
   align-items: center;
   position: relative;

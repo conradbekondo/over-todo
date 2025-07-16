@@ -4,6 +4,7 @@ import {
   CredentialSignInSchema,
   CredentialSignUpSchema,
   NewTaskSchema,
+  PreferencesSchema,
   TaskSchema,
 } from './schemas';
 
@@ -66,6 +67,7 @@ export type NewTodoRequest = z.infer<typeof NewTaskSchema>;
 export type CredentialSignUpRequest = z.infer<typeof CredentialSignUpSchema>;
 export type CredentialSignInRequest = z.infer<typeof CredentialSignInSchema>;
 export type Task = z.infer<typeof TaskSchema>;
+export type Preferences = z.infer<typeof PreferencesSchema>;
 
 export type Principal = {
   names: string;
@@ -73,4 +75,3 @@ export type Principal = {
   avatar?: string;
   id: string;
 };
-

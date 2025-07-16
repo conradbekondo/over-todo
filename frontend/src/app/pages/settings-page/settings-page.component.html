@@ -1,1 +1,40 @@
-<p>settings-page works!</p>
+<p class="text-gray-400">Settings</p>
+
+<section class="block space-y-3">
+    <h1 class="text-3xl font-extrabold">Notifications</h1>
+    <div class="md:max-w-3/4 space-y-3">
+        <label class="control control-checkbox m-0 w-full inline-block">
+            <p>Notify me via emails</p>
+            <input (input)="onEmailNotifyCheckBoxChanged($any($event.target).checked)" type="checkbox">
+            <div class="control_indicator"></div>
+        </label>
+        <label class="control control-checkbox m-0 w-full inline-block pointer-events-auto">
+            <p>Notify me via SMS / WhatsApp / Telegram</p>
+            <input type="checkbox">
+            <div class="control_indicator"></div>
+        </label>
+    </div>
+</section>
+<hr class="opacity-5" />
+<section class="block space-y-3 md:max-w-1/2">
+    <h1 class="text-3xl font-extrabold">Account Removal</h1>
+    <p class="text-gray-500 text-sm">
+        Deleting your account is permanent and cannot be undone. All your data, tasks, and settings will be permanently
+        removed.
+    </p>
+    <button (click)="onDeleteButtonClicked()"
+        class="rounded-md outline-none inline-flex items-center gap-2 bg-red-500 font-bold px-3 py-2 transition-colors text-sm text-white hover:bg-red-600 active:bg-red-700"
+        [disabled]="deletingAccount()">@if(deletingAccount())
+        {
+        <lucide-icon [img]="Loader" class="animate-spin" size="18" />
+        } <span>Delete
+            my account</span></button>
+    @if(showPasswordInput()) {
+    <form class="space-y-1" (submit)="onPasswordFormSubmit($event)">
+        <label for="password">Enter your password</label>
+        <input [(ngModel)]="password" autocomplete="off" type="password"
+            class="flex border-gray-400 p-2 border rounded-md outline-none" [ngModelOptions]="{standalone: true}"
+            id="password">
+    </form>
+    }
+</section>

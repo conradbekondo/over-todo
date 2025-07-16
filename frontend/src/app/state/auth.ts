@@ -7,14 +7,24 @@ import {
   StateToken,
 } from '@ngxs/store';
 import { patch } from '@ngxs/store/operators';
-import { tap } from 'rxjs';
-import { Principal } from '../../models/types';
+import { catchError, concatMap, tap, throwError } from 'rxjs';
+import { Preferences, Principal } from '../../models/types';
 import { AuthService } from '../services/auth.service';
-import { CredentialSignIn, CredentialSignUp } from './auth.actions';
+import {
+  CredentialSignIn,
+  CredentialSignUp,
+  DeleteAccount,
+  SignedOut,
+  SignOut,
+} from './auth.actions';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { environment } from '../../environments/environment.development';
+import { Navigate } from '@ngxs/router-plugin';
 
 export type AuthStateModel = {
   signedIn: boolean;
   userInfo?: Principal;
+  preferences?: Preferences;
 };
 export const AUTH_STATE = new StateToken<AuthStateModel>('auth');
 type Context = StateContext<AuthStateModel>;
@@ -26,6 +36,35 @@ type Context = StateContext<AuthStateModel>;
 @Injectable()
 export class AuthState implements NgxsOnInit {
   private authService = inject(AuthService);
+  private http = inject(HttpClient);
+
+  @Action(DeleteAccount)
+  onDeleteAccount(ctx: Context, { password }: DeleteAccount) {
+    return this.authService.deleteAccount(password).pipe(
+      tap(({ message, success }) => {
+        if (!success) return;
+        alert(message);
+        ctx.dispatch(new SignedOut('/'));
+      })
+    );
+  }
+
+  @Action(SignedOut)
+  onSignedOut(ctx: Context, { redirect }: SignedOut) {
+    ctx.setState({ signedIn: false });
+    ctx.dispatch(new Navigate([redirect ?? '/']));
+    // .subscribe(() => location.reload());
+  }
+
+  @Action(SignOut)
+  onSignOut(ctx: Context) {
+    return this.authService.signOut().pipe(
+      tap(({ success }) => {
+        if (!success) return;
+        ctx.dispatch(new SignedOut('/'));
+      })
+    );
+  }
 
   ngxsOnInit(ctx: Context): void {
     this.authService.getSessionInfo().pipe(
@@ -60,7 +99,15 @@ export class AuthState implements NgxsOnInit {
             }),
           })
         )
-      )
+      ),
+      concatMap(() =>
+        this.http
+          .get<Preferences>(`${environment.apiOrigin}/api/preferences`)
+          .pipe(
+            catchError((e: HttpErrorResponse) => throwError(() => e.error ?? e))
+          )
+      ),
+      tap((p) => ctx.setState(patch({ preferences: p })))
     );
   }
 

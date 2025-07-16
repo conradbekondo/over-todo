@@ -13,6 +13,7 @@
         "@angular/platform-browser-dynamic": "^19.2.0",
         "@angular/router": "^19.2.0",
         "@ngxs/logger-plugin": "^19.0.0",
+        "@ngxs/router-plugin": "^19.0.0",
         "@ngxs/storage-plugin": "^19.0.0",
         "@ngxs/store": "^19.0.0",
         "better-auth": "^1.2.9",
@@ -439,6 +440,8 @@
     "@ngtools/webpack": ["@ngtools/webpack@19.2.14", "", { "peerDependencies": { "@angular/compiler-cli": "^19.0.0 || ^19.2.0-next.0", "typescript": ">=5.5 <5.9", "webpack": "^5.54.0" } }, "sha512-PqrY+eeSUoF6JC6NCEQRPE/0Y2umSllD/fsDE6pnQrvGfztBpj0Jt1WMhgEI8BBcl4S7QW0LhPynkBmnCvTUmw=="],
 
     "@ngxs/logger-plugin": ["@ngxs/logger-plugin@19.0.0", "", { "dependencies": { "tslib": "^2.3.0" }, "peerDependencies": { "@angular/core": ">=19.0.0 <20.0.0", "@ngxs/store": "^19.0.0 || ^19.0.0-dev", "rxjs": ">=6.5.5" } }, "sha512-qLGB4muiLlDDYVUOLgXalWYjd3DumMJDM/JCuyQD7xJl9wwixbMWVME1tnZ1e2/FFqKRPuL+54OnEtQ3SrSpOg=="],
+
+    "@ngxs/router-plugin": ["@ngxs/router-plugin@19.0.0", "", { "dependencies": { "tslib": "^2.3.0" }, "peerDependencies": { "@angular/core": ">=19.0.0 <20.0.0", "@angular/router": ">=19.0.0 <20.0.0", "@ngxs/store": "^19.0.0 || ^19.0.0-dev", "rxjs": ">=6.5.5" } }, "sha512-0gjphW0Rfq19EUOvfsZqOLnbnuAu5yMYCDavoFJd/M8y+yJJ1UohcvzAdCBvubj2wtIAb5+9L3lMlctJ6Wwdcg=="],
 
     "@ngxs/storage-plugin": ["@ngxs/storage-plugin@19.0.0", "", { "dependencies": { "tslib": "^2.3.0" }, "peerDependencies": { "@angular/core": ">=19.0.0 <20.0.0", "@ngxs/store": "^19.0.0 || ^19.0.0-dev", "rxjs": ">=6.5.5", "ts-morph": "21.0.1" } }, "sha512-LwOrkVDsr4amcT5FlB9tl4IZnO+OSw7GMmAndCgeNo740BZQG9w9Pp+Rsjr34IhZx8YR5qFbgCLogzBQdSS4Mg=="],
 

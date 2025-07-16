@@ -1,6 +1,11 @@
 import { isToday } from 'date-fns';
 import { z } from 'zod';
 
+export const PreferencesSchema = z.object({
+  notifyMeUsingEmails: z.boolean(),
+  notifyMeUsingSms: z.boolean(),
+});
+
 export const TaskSchema = z
   .object({
     id: z.string().optional().nullable(),
